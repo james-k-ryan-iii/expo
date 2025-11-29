@@ -40,7 +40,8 @@ export function sendWorkerResult({
     const resultJson = error != null ? serialize({ error }) : serialize({ result });
     const resultBytes = new TextEncoder().encode(resultJson);
     const length = resultBytes.length;
-    resultArray.set(new Uint32Array([length]), 0);
+    const lengthArray = new Uint32Array([length]);
+    resultArray.set(new Uint8Array(lengthArray.buffer), 0);
     resultArray.set(resultBytes, 4);
     Atomics.store(lock, 0, RESOLVED);
   } else {
